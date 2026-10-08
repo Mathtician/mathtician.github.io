@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aresh Pourkavoos</title>
+<meta name="description" content="Aresh Pourkavoos — MS CS student at UIC working on verified concurrent compilation, LLM theorem-proving benchmarks, and systems.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="page">
+
+<header class="hero">
+  <div>
+    <h1>Aresh Pourkavoos</h1>
+    <p class="lede">
+      MS Computer Science student at the University of Illinois Chicago (graduating May 2027), BS from Carnegie Mellon.
+      I work where <b>formal methods</b>, <b>machine learning</b>, and <b>systems</b> meet:
+      verified concurrent compilation, benchmarks of LLM agents on machine-checked proofs,
+      and debugging things all the way down to the firmware.
+    </p>
+    <nav class="links">
+      <a href="mailto:apour3@uic.edu">apour3@uic.edu</a>
+      <a href="https://github.com/Mathtician">GitHub</a>
+      <a href="https://www.linkedin.com/in/aresh-pourkavoos-928939344/">LinkedIn</a>
+      <a href="Aresh_Pourkavoos_resume.pdf">Résumé (PDF)</a>
+    </nav>
+  </div>
+  <figure class="tiling" data-tiling>
+    <figcaption class="caption">
+      Click a dot to flip.
+      <span data-visited>1</span>/908 tilings seen ·
+      <button type="button" data-shuffle>random</button> ·
+      <button type="button" data-reset>reset</button>
+    </figcaption>
+  </figure>
+</header>
+
+<h2>Research</h2>
+
+<section class="entry" style="--c: var(--grass)">
+  <div class="head"><h3>An atomic machine for verified concurrent compilation</h3><span class="meta">UIC · 2026–present</span></div>
+  <p class="sub">MS thesis with Prof. William Mansky · Rocq, Verified Software Toolchain (VST)</p>
+  <p>
+    Concurrent separation logic guarantees that a verified program never gets stuck; verified concurrent
+    compilers like CASCompCert need a different guarantee, data-race freedom. I'm building the bridge:
+    a language-generic "atomic machine" semantics in Rocq that turns one into the other.
+  </p>
+  <ul>
+    <li>~4,600 lines of Rocq, ~190 lemmas. Instantiated for a port of RustBelt's λ<sub>Rust</sub>, with an equivalence theorem
+      showing a program is safe on the atomic machine iff it is safe in the reference semantics — and a counterexample
+      showing why a naive forward simulation doesn't suffice.</li>
+    <li>Merged upstream into Princeton's VST: <a href="https://github.com/PrincetonUniversity/VST/pull/859">#859 "Atomic machine"</a>,
+      <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856 build-dependency fix</a>, plus follow-up work on the <code>vst_on_iris</code> branch.</li>
+  </ul>
+</section>
+
+<section class="entry" style="--c: var(--sky)">
+  <div class="head"><h3>Convergence of denoising score matching</h3><span class="meta">CMU · Summer 2024</span></div>
+  <p class="sub">with Prof. Andrej Risteski</p>
+  <p>Worked toward bounding the convergence rate of denoising score matching, the training objective behind diffusion models.</p>
+</section>
+
+<h2>Selected projects</h2>
+
+<section class="entry" style="--c: var(--sun)">
+  <div class="head"><h3>rocq_llm_bench: AI agents vs. machine-checked proofs</h3><span class="meta">Sept 2026 · Python, Rocq, Nix</span></div>
+  <p>
+    A reproducible benchmark that runs AI coding agents — Claude Code, Codex, Cursor, pi, Google's agy — on theorem
+    proving in Rocq, from textbook lemmas to Putnam 2025, and measures where the wall-clock time actually goes.
+  </p>
+  <ul>
+    <li><b>A verifier that can't be fooled:</b> the original theorem statement is re-checked against the agent's proof in a
+      separate file, so redefined notation doesn't help, and <code>Print Assumptions</code> must bottom out in the standard library.</li>
+    <li><b>Identical sandbox for every harness:</b> bubblewrap + network namespace + a TLS-terminating proxy that strips
+      server-side web search and logs exact per-call timing and token cost.</li>
+    <li><b>It caught cheating.</b> Agents copied published Putnam solutions from the web, mined reference proofs out of
+      <code>git log</code>, and found them in a Nix store snapshot. Each hole was closed and the affected runs redone.</li>
+    <li><b>Findings:</b> several frontier agents now solve all 9 formalized Putnam 2025 problems within an hour, typically
+      in a few minutes each; the prover is only 0–11% of wall time — inference dominates. I also found three false or
+      vacuous statements in miniF2F-rocq's IMO set.</li>
+  </ul>
+  <div class="table-wrap">
+  <table class="results">
+    <thead><tr><th>Putnam 2025 (1 h limit)</th><th>solved</th><th>median time</th><th>cost</th></tr></thead>
+    <tbody>
+      <tr><td>Claude Opus 5.5 (medium)</td><td>9/9</td><td>207 s</td><td>$7.04</td></tr>
+      <tr><td>Claude Sonnet 5.5 (medium)</td><td>9/9</td><td>230 s</td><td>$10.82</td></tr>
+      <tr><td>GPT-6 Astra via Codex (low)</td><td>9/9</td><td>230 s</td><td>—</td></tr>
+      <tr><td>Gemini 3.8 Flash via agy (high)</td><td>8/9</td><td>604 s</td><td>—</td></tr>
+      <tr><td>DeepSeek V4.1 Flash via pi</td><td>5/9</td><td>—</td><td>$3.02</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="muted small">One attempt per cell so far; "—" means not yet priced (subscription harnesses). Results and transcripts aren't published yet.</p>
+  <div class="actions"><a href="https://github.com/Mathtician/rocq_llm_bench">code →</a></div>
+</section>
+
+<section class="entry" style="--c: var(--grass)">
+  <div class="head"><h3>Verified Unicode normalization in Lean 4</h3><span class="meta">Summer 2026 · Lean 4</span></div>
+  <p>
+    A streaming NFC/NFD/NFKC/NFKD normalizer for Unicode 17 with machine-checked proofs, then used as a
+    differential-testing oracle against about ten widely used implementations.
+  </p>
+  <ul>
+    <li>287 theorems, no <code>sorry</code>: outputs are normalized, normalization is idempotent, all 16 composition identities
+      between forms, incremental = batch, and productivity on infinite stream-safe input.</li>
+    <li>Passes 100% of the 20,034 official conformance rows; ~24.5M differential normalizations.</li>
+    <li>Found real bugs in other libraries, including composition bugs in Go's <code>golang.org/x/text</code>. Upstream reports in progress.</li>
+  </ul>
+</section>
+
+<section class="entry" style="--c: var(--earth)">
+  <div class="head"><h3>Root-causing a GPU hang, from PyTorch to firmware</h3><span class="meta">Sept 2026 · ROCm, Linux amdgpu</span></div>
+  <p>
+    Training on my laptop's Radeon 760M (gfx1103) intermittently reset the GPU. I traced it through PyTorch, the ROCm
+    runtime, and the kernel driver to the preemption mechanism: the default software context-save trap can't preempt
+    waves parked at a barrier, and the driver's own restore path has one, so an eviction landing just after a restore deadlocked until a timeout reset the GPU.
+  </p>
+  <ul>
+    <li>A driver patch switching to hardware traps survived ~73k saved-wave evictions and 13.5k training steps with no faults
+      and no throughput loss — contradicting an upstream assumption about this chip family. Upstream report in preparation.</li>
+    <li>On the way: ROCm is 4.1× faster than the CPU in BF16 for a large dense network on this iGPU.</li>
+  </ul>
+</section>
+
+<section class="entry" style="--c: var(--stone)">
+  <div class="head"><h3>Fuzzing a Zen 4 CPU with sandsifter</h3><span class="meta">Aug 2026 · Python, C, x86</span></div>
+  <p>
+    Ported the sandsifter x86 instruction fuzzer to Python 3 (fixing a bug that silently corrupted every logged byte ≥ 0x80),
+    ran 822M instructions on a Ryzen 5 7640U, and traced all 19.3M reported anomalies to about ten root causes,
+    each confirmed with a small C test program.
+  </p>
+  <ul>
+    <li>An AMD decoder quirk: the CPU fetches two extra bytes before rejecting <code>0F 78</code>, so at a page boundary it page-faults where Intel raises #UD.</li>
+    <li>A VEX encoding the manual forbids that executes anyway; <code>66 0F 8x</code> jumps truncating RIP to 16 bits; Linux's UMIP emulation making gdb's <code>stepi</code> silently skip an instruction; several disassembler (Capstone) bugs.</li>
+  </ul>
+  <div class="actions"><a href="https://github.com/Mathtician/sandsifter">code &amp; write-up →</a></div>
+</section>
+
+<section class="entry" style="--c: var(--sky)">
+  <div class="head"><h3>The size/quality frontier of quantized LLMs</h3><span class="meta">Summer 2026 · llama.cpp, Next.js</span></div>
+  <p>
+    A reproducible search over GGUF file size vs. bits-per-byte on two balanced subsets of Paloma, 1–3 GB models, 119 measurements,
+    with custom mixed quantization and vocabulary pruning (Gemma 3 4B pruned from 262k to 200k tokens). The best custom
+    1.5 GB model beat the previous frontier on web text by 0.009 BPB.
+  </p>
+</section>
+
+<section class="entry" style="--c: var(--sun)">
+  <div class="head"><h3>Weak memory models in Lean</h3><span class="meta">Fall 2025 · Lean 4, Claude Code</span></div>
+  <p>
+    Formalized the equivalence of the GAM and COM models from Zhang et al.,
+    <a href="https://arxiv.org/abs/1710.04259">"Weak Memory Models with Matching Axiomatic and Operational Definitions"</a>
+    (~5,100 lines, no <code>sorry</code>), parameterized over SC, TSO, RMO, ARM, and RISC-V orderings — and used it as an
+    early experiment in LLM-assisted proving.
+  </p>
+  <div class="actions"><a href="https://github.com/Mathtician/gam-formalization">code →</a></div>
+</section>
+
+<section class="entry" style="--c: var(--grass)">
+  <div class="head"><h3>Depthwise Sobolev preconditioning for ResNets</h3><span class="meta">in progress · PyTorch</span></div>
+  <p>
+    Treating a ResNet as a discretized ODE in depth and preconditioning updates by depth frequency.
+    Hessian spectroscopy so far: at initialization the curvature is flat across depth frequencies, and
+    predicted stability limits track the measured top Hessian eigenvalues (within ~12%) across depths 16–256 — which overturned my starting hypothesis.
+  </p>
+</section>
+
+<h2>Open source</h2>
+<ul class="compact">
+  <li><a href="https://github.com/PrincetonUniversity/VST/pull/859">PrincetonUniversity/VST #859</a> — atomic machine semantics (merged) ·
+      <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856</a> — fix opam build dependencies (merged)</li>
+  <li><a href="https://github.com/connectbot/connectbot/pull/2355">connectbot #2355</a> — terminal bells post a notification only while the UI isn't visible; since the Compose rewrite they never did (merged)</li>
+  <li><a href="https://github.com/NixOS/nixpkgs/pull/530640">nixpkgs #530640</a> — Discord: recreate module symlinks on every launch so they don't go stale after updates (merged)</li>
+  <li><a href="https://github.com/NixOS/nixpkgs/pull/482392">nixpkgs #482392</a> — fix the outguess build on modern GCC (merged) · and in <a href="https://github.com/Mathtician/outguess">my outguess fork</a>, replaced its patched libjpeg with the system library, with a test that both backends agree</li>
+</ul>
+
+<h2>Experience</h2>
+
+<section class="entry" style="--c: var(--earth)">
+  <div class="head"><h3>Computer Vision Engineer (intern)</h3><span class="meta">Alphacore, Inc. · Tempe, AZ · Summer 2025</span></div>
+  <ul>
+    <li>Started a greenfield stereo-camera system for long-range maritime multi-object tracking (OpenCV, YOLOv11, Kalman filters, Hungarian matching); the work helped win a contract for further development.</li>
+    <li>Found why calibration error was too high — a quiver plot of reprojection residuals exposed printing errors in the calibration target.</li>
+    <li>Reverse-engineered part of the camera's proprietary USB protocol (Wireshark, Ghidra, Claude Code with MCP) to control exposure without the vendor's Windows app.</li>
+    <li>Built a GUI (Dear ImGui) for live module swapping and parameter tuning of every pipeline stage; helped set up self-hosted Git.</li>
+  </ul>
+</section>
+
+<section class="entry" style="--c: var(--sky)">
+  <div class="head"><h3>Teaching assistant, 15-317 Constructive Logic</h3><span class="meta">CMU · Fall 2024</span></div>
+  <p class="muted">Recitations, office hours, grading.</p>
+</section>
+
+<section class="entry" style="--c: var(--stone)">
+  <div class="head"><h3>President, CMU Computer Club</h3><span class="meta">CMU · 2024</span></div>
+  <p class="muted">Ran club events and helped maintain club-hosted servers used by many student organizations.</p>
+</section>
+
+<h2>Things to play with</h2>
+
+<section class="entry" style="--c: var(--sun)">
+  <div class="head"><h3>Isomorphic keyboard</h3><span class="meta">Rust, evdev, QMK</span></div>
+  <p>
+    A laptop keyboard's staggered rows are already a hexagonal grid; this plays it as a Wicki–Hayden instrument, where every
+    chord has the same shape in every key. The native version reads evdev, speaks MIDI, and on a Hall-effect keyboard runs my
+    custom firmware that times each keystroke for velocity and lights up the current scale.
+  </p>
+  <div class="actions"><a href="isomorphic/">play it in your browser →</a><a href="https://github.com/Mathtician/isomorphic">code →</a></div>
+</section>
+
+<section class="entry" style="--c: var(--grass)" data-golf>
+  <div class="head"><h3>Tessera Links</h3><span class="meta">TypeScript, exact arithmetic</span></div>
+  <p>
+    Golf on a kisrhombille tiling: a hexagonal ball ricochets through a world of 30-60-90 triangles, with every collision
+    computed exactly in integer lattice coordinates and rational time — and cross-checked against a floating-point simulator.
+  </p>
+  <div class="actions"><a href="golf/">play →</a><a href="https://github.com/Mathtician/tessera-links">code →</a></div>
+</section>
+
+<section class="entry" style="--c: var(--sky)">
+  <div class="head"><h3>The tiling up top</h3><span class="meta">JavaScript</span></div>
+  <p>
+    My avatar is one of the 908 rhombus tilings of a regular 12-gon, and you can walk between all of them by flipping hexagons.
+    Vertices live in ℤ<sup>6</sup>, so the combinatorics is exact; a flip is a 180° rotation of three tiles about the hexagon's center.
+    Each tile's color is determined by its angle, which flips preserve.
+    <a href="tiling.js">Source.</a>
+  </p>
+</section>
+
+<h2>Smaller things</h2>
+<ul class="compact">
+  <li><b>449-byte ELF.</b> Smallest x86 Linux executable I could make that prints a particular 11,178-bit string — BWT, LZ77 with Exp-Golomb codes, and code hidden in ELF header fields.</li>
+  <li><b>Common nets of boxes.</b> All 2,263 common unfoldings of the 1×1×5 and 1×2×3 boxes, and which can be deformed into one another (<a href="https://github.com/Mathtician/common_nets">repo</a>).</li>
+  <li><b>The Voynich manuscript's line structure.</b> A controlled statistical study of whether repetition aligns in columns across adjacent lines, reporting both positive and negative results.</li>
+  <li><b>Speculative decoding on a laptop iGPU.</b> EAGLE3 and multi-token-prediction drafting in llama.cpp: up to 2.1× faster generation for 30B-class models on a Radeon 760M.</li>
+  <li><b>OEIS.</b> <a href="https://oeis.org/search?q=author%3A%22Aresh+Pourkavoos%22">Seven integer sequences</a>, e.g. <a href="https://oeis.org/A330731">A330731</a>.</li>
+  <li><b>Idea book.</b> <a href="https://github.com/Mathtician/ideas">Fifty-odd short math write-ups</a> in LaTeX.</li>
+</ul>
+
+<h2>Education</h2>
+<div class="grid2">
+  <section class="entry" style="--c: var(--grass)">
+    <h3>University of Illinois Chicago</h3>
+    <p class="sub">MS, Computer Science · 2025–2027 · GPA 4.00</p>
+    <p class="small muted">Operating Systems · Agentic AI · RLHF · Systems Performance · Advanced Machine Learning</p>
+  </section>
+  <section class="entry" style="--c: var(--sky)">
+    <h3>Carnegie Mellon University</h3>
+    <p class="sub">BS, Computer Science, minor in Mathematics · 2021–2025 · GPA 3.83</p>
+    <p class="small muted">Intro to ML (PhD) · Compiler Design (a C-subset compiler in Rust, plus an x86 assembler) · Foundations of Programming Languages · Honors Abstract Algebra I–II · Honors Real Analysis</p>
+  </section>
+</div>
+<p><b>Putnam Competition:</b> top 200 (2022), top 500 (2021).</p>
+
+<footer>
+  <p>Hand-written HTML, no build step. Last updated October 2026.</p>
+</footer>
+</main>
+<script src="tiling.js"></script>
+</body>
+</html>
