@@ -13,8 +13,8 @@
   const N = 6;
   const SVGNS = "http://www.w3.org/2000/svg";
   // Tile colors depend only on the angle between the tile's two directions,
-  // which flips preserve.  (This is exactly the coloring of my avatar.)
-  const COLORS = { 1: "#fff080", 2: "#80e0ff", 3: "#80c080", 4: "#b0a080", 5: "#a0a0a0" };
+  // which flips preserve.  (My avatar's coloring; the printed version averages these with white.)
+  const COLORS = { 1: "#ffe000", 2: "#00c0ff", 3: "#008000", 4: "#604000", 5: "#404040" };
 
   const unit = (k) => { const v = Array(N).fill(0); v[k] = 1; return v; };
   const add = (p, q) => p.map((x, i) => x + q[i]);
@@ -116,7 +116,7 @@
       gDots.replaceChildren(...flipSites(tiles).map((site) => {
         const [x, y] = proj(site.vertex);
         const dot = document.createElementNS(SVGNS, "circle");
-        Object.entries({ cx: x, cy: y, r: 2.4, tabindex: 0, role: "button", "aria-label": "flip" })
+        Object.entries({ cx: x, cy: y, r: 3.4, tabindex: 0, role: "button", "aria-label": "flip" })
           .forEach(([k, v]) => dot.setAttribute(k, v));
         dot.addEventListener("click", () => flip(site));
         dot.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(site); } });
@@ -132,6 +132,7 @@
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
       const start = performance.now();
       gDots.style.opacity = 0;
+      site.tiles.forEach((i) => gTiles.append(polys[i])); // moving tiles on top
       const step = (now) => {
         const u = reduce ? 1 : Math.min(1, (now - start) / ms);
         const eased = u < 0.5 ? 2 * u * u : 1 - 2 * (1 - u) * (1 - u);

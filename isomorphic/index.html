@@ -35,14 +35,14 @@
   <p>
     A computer keyboard's staggered rows already form a (sheared) hexagonal grid.
     Assign <b>+2 semitones</b> to a step right and <b>+5</b> to a step up-left (so up-right is <b>+7</b>),
-    and you get the <a href="https://en.wikipedia.org/wiki/Wicki%E2%80%93Hayden_note_layout">Wicki–Hayden</a> layout used on concertinas:
+    and you get the <a href="https://en.wikipedia.org/wiki/Wicki%E2%80%93Hayden_note_layout">Wicki-Hayden</a> layout used on concertinas:
     every chord and scale has the same shape in every key.
     The note of a key is just <code>base + 2·col + 5·row</code>.
   </p>
   <p>
     This page is a small browser port of <a href="https://github.com/mathtician/isomorphic">my native version</a>,
-    which reads keys straight from Linux evdev and drives a MIDI synth — and, on a Hall-effect keyboard
-    (Keychron Q1 HE) running my custom QMK firmware, measures each keystroke's speed for velocity and lights up the keys of the current scale.
+    which reads keys straight from Linux evdev and drives a MIDI synth. On a Hall-effect keyboard
+    (Keychron Q1 HE) running my custom QMK firmware, it measures each keystroke's speed for velocity and lights up the keys of the current scale.
   </p>
 
   <div class="controls">
@@ -55,7 +55,7 @@
   <h2>Try</h2>
   <ul>
     <li>Major triad: <kbd>z</kbd> <kbd>c</kbd> <kbd>s</kbd> (root, +4, +7). Slide the same shape anywhere to change key.</li>
-    <li>Major scale: <kbd>z</kbd> <kbd>x</kbd> <kbd>c</kbd> <kbd>a</kbd> <kbd>s</kbd> <kbd>d</kbd> <kbd>f</kbd> <kbd>w</kbd> — then the same shape from any other key.</li>
+    <li>Major scale: <kbd>z</kbd> <kbd>x</kbd> <kbd>c</kbd> <kbd>a</kbd> <kbd>s</kbd> <kbd>d</kbd> <kbd>f</kbd> <kbd>w</kbd>, then the same shape from any other key.</li>
     <li>Minor triad: <kbd>x</kbd> <kbd>a</kbd> <kbd>d</kbd> (D minor). Compare its shape to the major triad's.</li>
   </ul>
   <p class="muted small">Browsers can't see every key combination (some keyboards drop chords, and some shortcuts are reserved), and velocity is fixed. Touch and mouse work too.</p>

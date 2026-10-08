@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aresh Pourkavoos</title>
-<meta name="description" content="Aresh Pourkavoos — MS CS student at UIC working on verified concurrent compilation, LLM theorem-proving benchmarks, and systems.">
+<meta name="description" content="Aresh Pourkavoos: MS CS student at UIC working on verified concurrent compilation, benchmarks of LLM agents on machine-checked proofs, and systems.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 </head>
@@ -37,221 +37,293 @@
   </figure>
 </header>
 
-<h2>Research</h2>
+<p class="hint">Click any entry for details. <button type="button" class="linkish" data-expand-all>Expand all</button></p>
 
-<section class="entry" style="--c: var(--grass)">
-  <div class="head"><h3>An atomic machine for verified concurrent compilation</h3><span class="meta">UIC · 2026–present</span></div>
-  <p class="sub">MS thesis with Prof. William Mansky · Rocq, Verified Software Toolchain (VST)</p>
-  <p>
-    Concurrent separation logic guarantees that a verified program never gets stuck; verified concurrent
-    compilers like CASCompCert need a different guarantee, data-race freedom. I'm building the bridge:
-    a language-generic "atomic machine" semantics in Rocq that turns one into the other.
-  </p>
-  <ul>
-    <li>~4,600 lines of Rocq, ~190 lemmas. Instantiated for a port of RustBelt's λ<sub>Rust</sub>, with an equivalence theorem
-      showing a program is safe on the atomic machine iff it is safe in the reference semantics — and a counterexample
-      showing why a naive forward simulation doesn't suffice.</li>
-    <li>Merged upstream into Princeton's VST: <a href="https://github.com/PrincetonUniversity/VST/pull/859">#859 "Atomic machine"</a>,
-      <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856 build-dependency fix</a>, plus follow-up work on the <code>vst_on_iris</code> branch.</li>
-  </ul>
-</section>
+<h2>Formal methods</h2>
 
-<section class="entry" style="--c: var(--sky)">
-  <div class="head"><h3>Convergence of denoising score matching</h3><span class="meta">CMU · Summer 2024</span></div>
-  <p class="sub">with Prof. Andrej Risteski</p>
-  <p>Worked toward bounding the convergence rate of denoising score matching, the training objective behind diffusion models.</p>
-</section>
-
-<h2>Selected projects</h2>
-
-<section class="entry" style="--c: var(--sun)">
-  <div class="head"><h3>rocq_llm_bench: AI agents vs. machine-checked proofs</h3><span class="meta">Sept 2026 · Python, Rocq, Nix</span></div>
-  <p>
-    A reproducible benchmark that runs AI coding agents — Claude Code, Codex, Cursor, pi, Google's agy — on theorem
-    proving in Rocq, from textbook lemmas to Putnam 2025, and measures where the wall-clock time actually goes.
-  </p>
-  <ul>
-    <li><b>A verifier that can't be fooled:</b> the original theorem statement is re-checked against the agent's proof in a
-      separate file, so redefined notation doesn't help, and <code>Print Assumptions</code> must bottom out in the standard library.</li>
-    <li><b>Identical sandbox for every harness:</b> bubblewrap + network namespace + a TLS-terminating proxy that strips
-      server-side web search and logs exact per-call timing and token cost.</li>
-    <li><b>It caught cheating.</b> Agents copied published Putnam solutions from the web, mined reference proofs out of
-      <code>git log</code>, and found them in a Nix store snapshot. Each hole was closed and the affected runs redone.</li>
-    <li><b>Findings:</b> several frontier agents now solve all 9 formalized Putnam 2025 problems within an hour, typically
-      in a few minutes each; the prover is only 0–11% of wall time — inference dominates. I also found three false or
-      vacuous statements in miniF2F-rocq's IMO set.</li>
-  </ul>
-  <div class="table-wrap">
-  <table class="results">
-    <thead><tr><th>Putnam 2025 (1 h limit)</th><th>solved</th><th>median time</th><th>cost</th></tr></thead>
-    <tbody>
-      <tr><td>Claude Opus 5.5 (medium)</td><td>9/9</td><td>207 s</td><td>$7.04</td></tr>
-      <tr><td>Claude Sonnet 5.5 (medium)</td><td>9/9</td><td>230 s</td><td>$10.82</td></tr>
-      <tr><td>GPT-6 Astra via Codex (low)</td><td>9/9</td><td>230 s</td><td>—</td></tr>
-      <tr><td>Gemini 3.8 Flash via agy (high)</td><td>8/9</td><td>604 s</td><td>—</td></tr>
-      <tr><td>DeepSeek V4.1 Flash via pi</td><td>5/9</td><td>—</td><td>$3.02</td></tr>
-    </tbody>
-  </table>
+<details class="entry" style="--c: var(--grass)">
+  <summary>
+    <span class="head"><span class="title">An atomic machine for verified concurrent compilation</span><span class="meta">MS thesis · UIC · 2026 to present</span></span>
+    <span class="hook">Rocq semantics bridging concurrent separation logic and verified concurrent compilers. Merged into Princeton's VST.</span>
+  </summary>
+  <div class="body">
+    <p class="sub">Advised by Prof. William Mansky · Rocq, Verified Software Toolchain (VST)</p>
+    <p>
+      Concurrent separation logic guarantees that a verified program never gets stuck. Verified concurrent
+      compilers like CASCompCert need a different guarantee: data-race freedom. I'm building the bridge,
+      a language-generic "atomic machine" semantics in Rocq that turns one into the other.
+    </p>
+    <ul>
+      <li>~4,600 lines of Rocq, ~190 lemmas. Instantiated for a port of RustBelt's λ<sub>Rust</sub>, with an equivalence theorem
+        (a program is safe on the atomic machine iff it is safe in the reference semantics) and a counterexample
+        showing why a naive forward simulation doesn't suffice.</li>
+      <li>Merged upstream: <a href="https://github.com/PrincetonUniversity/VST/pull/859">VST #859 "Atomic machine"</a> and
+        <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856 (build dependencies)</a>, plus follow-up work on the <code>vst_on_iris</code> branch.</li>
+    </ul>
   </div>
-  <p class="muted small">One attempt per cell so far; "—" means not yet priced (subscription harnesses). Results and transcripts aren't published yet.</p>
+</details>
+
+<details class="entry" style="--c: var(--grass)">
+  <summary>
+    <span class="head"><span class="title">Verified Unicode normalization in Lean 4</span><span class="meta">Summer 2026 · Lean 4</span></span>
+    <span class="hook">Streaming NFC/NFD/NFKC/NFKD with 287 theorems, used as an oracle that found bugs in other implementations.</span>
+  </summary>
+  <div class="body">
+    <p>A streaming Unicode 17 normalizer with machine-checked proofs, then used for differential testing against about ten widely used implementations.</p>
+    <ul>
+      <li>287 theorems, no <code>sorry</code>: outputs are normalized, normalization is idempotent, all 16 composition identities
+        between forms hold, incremental output equals batch output, and the normalizer is productive on infinite stream-safe input.</li>
+      <li>Passes all 20,034 official conformance rows; ~24.5M differential normalizations.</li>
+      <li>Found real bugs in other libraries, including composition bugs in Go's <code>golang.org/x/text</code>. Upstream reports in progress.</li>
+    </ul>
+  </div>
+</details>
+
+<details class="entry" style="--c: var(--grass)">
+  <summary>
+    <span class="head"><span class="title">Weak memory models in Lean</span><span class="meta">Fall 2025 · Lean 4</span></span>
+    <span class="hook">Formalized the GAM ⇔ COM equivalence from Zhang et al. (2017), ~5,100 lines, parameterized over six memory models.</span>
+  </summary>
+  <div class="body">
+    <p>
+      Formalized the equivalence of the GAM and COM models from
+      <a href="https://arxiv.org/abs/1710.04259">"Weak Memory Models with Matching Axiomatic and Operational Definitions"</a>
+      with no <code>sorry</code>, parameterized over SC, TSO, RMO, WMM, ARM, and RISC-V orderings. Also an early experiment in
+      LLM-assisted proving with Claude Code.
+    </p>
+    <div class="actions"><a href="https://github.com/Mathtician/gam-formalization">code →</a></div>
+  </div>
+</details>
+
+<h2>LLMs and machine learning</h2>
+
+<section class="entry open-entry" style="--c: var(--sun)">
+  <div class="head"><span class="title">rocq_llm_bench: AI agents vs. machine-checked proofs</span><span class="meta">Sept 2026 · Python, Rocq, Nix</span></div>
+  <p class="hook">
+    <b>824</b> graded attempts by <b>27</b> agent configurations (Claude Code, Codex, Cursor, pi, agy) on <b>108</b> Rocq problems,
+    from textbook lemmas to Putnam 2025: 60 hours of agents proving theorems.
+  </p>
+  <figure class="rlb" data-rlb-chart="data/rocq_llm_bench.json">
+    <figcaption class="small muted">
+      Each mark is one attempt on a problem at least two configurations tried; filled = proved, hollow with arrow = ran out of time or gave up.
+      Lines are each highlighted configuration's fitted trend from a censored model log&nbsp;T&nbsp;=&nbsp;a·d&nbsp;+&nbsp;c. Click names to compare; hover marks for details.
+    </figcaption>
+  </figure>
+  <details class="more">
+    <summary>How it works and what it found</summary>
+    <div class="body">
+      <ul>
+        <li><b>A verifier that can't be fooled:</b> the original theorem statement is re-checked against the agent's proof in a
+          separate file, so redefined notation doesn't help, and <code>Print Assumptions</code> must bottom out in the standard library.</li>
+        <li><b>Identical sandbox for every harness:</b> bubblewrap, a network namespace, and a TLS-terminating proxy that strips
+          server-side web search and logs exact per-call timing and token cost.</li>
+        <li><b>It caught cheating.</b> Agents copied published Putnam solutions from the web, mined reference proofs out of
+          <code>git log</code>, and found them in a Nix store snapshot. Each hole was closed and the affected runs redone.</li>
+        <li><b>Findings:</b> several frontier agents solve all 9 formalized Putnam 2025 problems within an hour, typically in a few
+          minutes each, and the prover is only 0 to 11% of wall time; inference dominates. I also found three false or vacuous
+          statements in miniF2F-rocq's IMO set.</li>
+      </ul>
+      <div class="table-wrap">
+      <table class="results">
+        <thead><tr><th>Putnam 2025 (1 h limit)</th><th>solved</th><th>median time</th><th>cost</th></tr></thead>
+        <tbody>
+          <tr><td>Claude Opus 5.5 (medium)</td><td>9/9</td><td>207 s</td><td>$7.04</td></tr>
+          <tr><td>Claude Sonnet 5.5 (medium)</td><td>9/9</td><td>230 s</td><td>$10.82</td></tr>
+          <tr><td>GPT-6 Astra via Codex (low)</td><td>9/9</td><td>230 s</td><td>n/a</td></tr>
+          <tr><td>Gemini 3.8 Flash via agy (high)</td><td>8/9</td><td>604 s</td><td>n/a</td></tr>
+          <tr><td>DeepSeek V4.1 Flash via pi</td><td>5/9</td><td></td><td>$3.02</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="muted small">One attempt per cell. Subscription harnesses aren't priced yet. Transcripts aren't published yet.</p>
+    </div>
+  </details>
   <div class="actions"><a href="https://github.com/Mathtician/rocq_llm_bench">code →</a></div>
 </section>
 
-<section class="entry" style="--c: var(--grass)">
-  <div class="head"><h3>Verified Unicode normalization in Lean 4</h3><span class="meta">Summer 2026 · Lean 4</span></div>
-  <p>
-    A streaming NFC/NFD/NFKC/NFKD normalizer for Unicode 17 with machine-checked proofs, then used as a
-    differential-testing oracle against about ten widely used implementations.
-  </p>
-  <ul>
-    <li>287 theorems, no <code>sorry</code>: outputs are normalized, normalization is idempotent, all 16 composition identities
-      between forms, incremental = batch, and productivity on infinite stream-safe input.</li>
-    <li>Passes 100% of the 20,034 official conformance rows; ~24.5M differential normalizations.</li>
-    <li>Found real bugs in other libraries, including composition bugs in Go's <code>golang.org/x/text</code>. Upstream reports in progress.</li>
-  </ul>
-</section>
+<details class="entry" style="--c: var(--sky)">
+  <summary>
+    <span class="head"><span class="title">The size/quality frontier of quantized LLMs</span><span class="meta">Summer 2026 · llama.cpp</span></span>
+    <span class="hook">119 measurements of GGUF size vs. bits-per-byte; a custom pruned 1.5 GB model beat the previous frontier.</span>
+  </summary>
+  <div class="body">
+    <p>
+      A reproducible search over GGUF file size vs. bits-per-byte on two balanced subsets of Paloma, for 1 to 3 GB models,
+      with custom mixed quantization and vocabulary pruning (Gemma 3 4B pruned from 262k to 200k tokens). The best custom
+      1.5 GB model beat the previous frontier on web text by 0.009 BPB.
+    </p>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--earth)">
-  <div class="head"><h3>Root-causing a GPU hang, from PyTorch to firmware</h3><span class="meta">Sept 2026 · ROCm, Linux amdgpu</span></div>
-  <p>
-    Training on my laptop's Radeon 760M (gfx1103) intermittently reset the GPU. I traced it through PyTorch, the ROCm
-    runtime, and the kernel driver to the preemption mechanism: the default software context-save trap can't preempt
-    waves parked at a barrier, and the driver's own restore path has one, so an eviction landing just after a restore deadlocked until a timeout reset the GPU.
-  </p>
-  <ul>
-    <li>A driver patch switching to hardware traps survived ~73k saved-wave evictions and 13.5k training steps with no faults
-      and no throughput loss — contradicting an upstream assumption about this chip family. Upstream report in preparation.</li>
-    <li>On the way: ROCm is 4.1× faster than the CPU in BF16 for a large dense network on this iGPU.</li>
-  </ul>
-</section>
+<details class="entry" style="--c: var(--sky)">
+  <summary>
+    <span class="head"><span class="title">Depthwise Sobolev preconditioning for ResNets</span><span class="meta">in progress · PyTorch</span></span>
+    <span class="hook">Treating depth as time and preconditioning by depth frequency; Hessian spectroscopy overturned my starting hypothesis.</span>
+  </summary>
+  <div class="body">
+    <p>
+      A ResNet is a discretized ODE in depth, so updates can be preconditioned by their frequency along depth.
+      At initialization the curvature turns out to be flat across depth frequencies, and the predicted stability limits
+      track the measured top Hessian eigenvalues (within ~12%) across depths 16 to 256.
+    </p>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--stone)">
-  <div class="head"><h3>Fuzzing a Zen 4 CPU with sandsifter</h3><span class="meta">Aug 2026 · Python, C, x86</span></div>
-  <p>
-    Ported the sandsifter x86 instruction fuzzer to Python 3 (fixing a bug that silently corrupted every logged byte ≥ 0x80),
-    ran 822M instructions on a Ryzen 5 7640U, and traced all 19.3M reported anomalies to about ten root causes,
-    each confirmed with a small C test program.
-  </p>
-  <ul>
-    <li>An AMD decoder quirk: the CPU fetches two extra bytes before rejecting <code>0F 78</code>, so at a page boundary it page-faults where Intel raises #UD.</li>
-    <li>A VEX encoding the manual forbids that executes anyway; <code>66 0F 8x</code> jumps truncating RIP to 16 bits; Linux's UMIP emulation making gdb's <code>stepi</code> silently skip an instruction; several disassembler (Capstone) bugs.</li>
-  </ul>
-  <div class="actions"><a href="https://github.com/Mathtician/sandsifter">code &amp; write-up →</a></div>
-</section>
+<details class="entry" style="--c: var(--sky)">
+  <summary>
+    <span class="head"><span class="title">Speculative decoding on a laptop iGPU</span><span class="meta">2026 · llama.cpp, ROCm, Vulkan</span></span>
+    <span class="hook">Up to 2.1× faster generation for 30B-class models on a Radeon 760M.</span>
+  </summary>
+  <div class="body">
+    <p>
+      EAGLE3 and multi-token-prediction drafting in llama.cpp, built for gfx1103. On Qwen3-32B, MTP drafting went from 4.2 to
+      8.9 tokens/s at 83% acceptance. On this chip, Vulkan beat ROCm for batched verification.
+    </p>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--sky)">
-  <div class="head"><h3>The size/quality frontier of quantized LLMs</h3><span class="meta">Summer 2026 · llama.cpp, Next.js</span></div>
-  <p>
-    A reproducible search over GGUF file size vs. bits-per-byte on two balanced subsets of Paloma, 1–3 GB models, 119 measurements,
-    with custom mixed quantization and vocabulary pruning (Gemma 3 4B pruned from 262k to 200k tokens). The best custom
-    1.5 GB model beat the previous frontier on web text by 0.009 BPB.
-  </p>
-</section>
+<h2>Systems</h2>
 
-<section class="entry" style="--c: var(--sun)">
-  <div class="head"><h3>Weak memory models in Lean</h3><span class="meta">Fall 2025 · Lean 4, Claude Code</span></div>
-  <p>
-    Formalized the equivalence of the GAM and COM models from Zhang et al.,
-    <a href="https://arxiv.org/abs/1710.04259">"Weak Memory Models with Matching Axiomatic and Operational Definitions"</a>
-    (~5,100 lines, no <code>sorry</code>), parameterized over SC, TSO, RMO, ARM, and RISC-V orderings — and used it as an
-    early experiment in LLM-assisted proving.
-  </p>
-  <div class="actions"><a href="https://github.com/Mathtician/gam-formalization">code →</a></div>
-</section>
+<details class="entry" style="--c: var(--earth)">
+  <summary>
+    <span class="head"><span class="title">Root-causing a GPU hang, from PyTorch to firmware</span><span class="meta">Sept 2026 · ROCm, Linux amdgpu</span></span>
+    <span class="hook">Traced intermittent GPU resets to a preemption deadlock and validated a driver fix over ~73k evictions.</span>
+  </summary>
+  <div class="body">
+    <p>
+      Training on my laptop's Radeon 760M (gfx1103) intermittently reset the GPU. I traced it through PyTorch, the ROCm
+      runtime, and the kernel driver to the preemption mechanism. The default software context-save trap can't preempt
+      waves parked at a barrier, and the driver's own restore path has one, so an eviction landing just after a restore
+      deadlocked until a timeout reset the GPU.
+    </p>
+    <ul>
+      <li>A driver patch switching to hardware traps survived ~73k saved-wave evictions and 13.5k training steps with no faults
+        and no throughput loss, contradicting an upstream assumption about this chip family. Upstream report in preparation.</li>
+      <li>Along the way: ROCm is 4.1× faster than the CPU in BF16 for a large dense network on this iGPU.</li>
+    </ul>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--grass)">
-  <div class="head"><h3>Depthwise Sobolev preconditioning for ResNets</h3><span class="meta">in progress · PyTorch</span></div>
-  <p>
-    Treating a ResNet as a discretized ODE in depth and preconditioning updates by depth frequency.
-    Hessian spectroscopy so far: at initialization the curvature is flat across depth frequencies, and
-    predicted stability limits track the measured top Hessian eigenvalues (within ~12%) across depths 16–256 — which overturned my starting hypothesis.
-  </p>
-</section>
+<details class="entry" style="--c: var(--earth)">
+  <summary>
+    <span class="head"><span class="title">Fuzzing a Zen 4 CPU with sandsifter</span><span class="meta">Aug 2026 · Python, C, x86</span></span>
+    <span class="hook">822M instructions on a Ryzen 7640U; all 19.3M anomalies traced to ~10 root causes.</span>
+  </summary>
+  <div class="body">
+    <p>
+      Ported the sandsifter x86 instruction fuzzer to Python 3 (fixing a bug that silently corrupted every logged byte ≥ 0x80),
+      ran it on a Ryzen 5 7640U, and confirmed each root cause with a small C test program.
+    </p>
+    <ul>
+      <li>An AMD decoder quirk: the CPU fetches two extra bytes before rejecting <code>0F 78</code>, so at a page boundary it page-faults where Intel raises #UD.</li>
+      <li>A VEX encoding the manual forbids that executes anyway; <code>66 0F 8x</code> jumps truncating RIP to 16 bits; Linux's UMIP emulation making gdb's <code>stepi</code> silently skip an instruction; several Capstone disassembler bugs.</li>
+    </ul>
+    <div class="actions"><a href="https://github.com/Mathtician/sandsifter">code and write-up →</a></div>
+  </div>
+</details>
 
-<h2>Open source</h2>
-<ul class="compact">
-  <li><a href="https://github.com/PrincetonUniversity/VST/pull/859">PrincetonUniversity/VST #859</a> — atomic machine semantics (merged) ·
-      <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856</a> — fix opam build dependencies (merged)</li>
-  <li><a href="https://github.com/connectbot/connectbot/pull/2355">connectbot #2355</a> — terminal bells post a notification only while the UI isn't visible; since the Compose rewrite they never did (merged)</li>
-  <li><a href="https://github.com/NixOS/nixpkgs/pull/530640">nixpkgs #530640</a> — Discord: recreate module symlinks on every launch so they don't go stale after updates (merged)</li>
-  <li><a href="https://github.com/NixOS/nixpkgs/pull/482392">nixpkgs #482392</a> — fix the outguess build on modern GCC (merged) · and in <a href="https://github.com/Mathtician/outguess">my outguess fork</a>, replaced its patched libjpeg with the system library, with a test that both backends agree</li>
-</ul>
+<details class="entry" style="--c: var(--earth)">
+  <summary>
+    <span class="head"><span class="title">A 449-byte ELF</span><span class="meta">2026 · x86 assembly</span></span>
+    <span class="hook">The smallest Linux executable I could make that prints a particular 11,178-bit string.</span>
+  </summary>
+  <div class="body">
+    <p>Shrunk from 656 to 449 bytes over seven versions: Burrows-Wheeler plus run lengths, LZ77 with Exp-Golomb codes, and code hidden in ELF header fields, with JavaScript reference decoders verifying each payload.</p>
+  </div>
+</details>
+
+<details class="entry" style="--c: var(--earth)">
+  <summary>
+    <span class="head"><span class="title">Merged open-source contributions</span><span class="meta">VST, connectbot, nixpkgs</span></span>
+    <span class="hook">Five merged PRs across a verification toolchain, an Android SSH client, and Nix packages.</span>
+  </summary>
+  <div class="body">
+    <ul>
+      <li><a href="https://github.com/PrincetonUniversity/VST/pull/859">PrincetonUniversity/VST #859</a>: atomic machine semantics. <a href="https://github.com/PrincetonUniversity/VST/pull/856">#856</a>: fix opam build dependencies.</li>
+      <li><a href="https://github.com/connectbot/connectbot/pull/2355">connectbot #2355</a>: terminal bells post a notification only while the UI isn't visible (since the Compose rewrite they never did).</li>
+      <li><a href="https://github.com/NixOS/nixpkgs/pull/530640">nixpkgs #530640</a>: Discord recreates its module symlinks on every launch, so they don't go stale after updates.</li>
+      <li><a href="https://github.com/NixOS/nixpkgs/pull/482392">nixpkgs #482392</a>: fix the outguess build on modern GCC. In <a href="https://github.com/Mathtician/outguess">my outguess fork</a>, replaced its patched libjpeg with the system library, with a test that both backends agree.</li>
+    </ul>
+  </div>
+</details>
 
 <h2>Experience</h2>
 
-<section class="entry" style="--c: var(--earth)">
-  <div class="head"><h3>Computer Vision Engineer (intern)</h3><span class="meta">Alphacore, Inc. · Tempe, AZ · Summer 2025</span></div>
-  <ul>
-    <li>Started a greenfield stereo-camera system for long-range maritime multi-object tracking (OpenCV, YOLOv11, Kalman filters, Hungarian matching); the work helped win a contract for further development.</li>
-    <li>Found why calibration error was too high — a quiver plot of reprojection residuals exposed printing errors in the calibration target.</li>
-    <li>Reverse-engineered part of the camera's proprietary USB protocol (Wireshark, Ghidra, Claude Code with MCP) to control exposure without the vendor's Windows app.</li>
-    <li>Built a GUI (Dear ImGui) for live module swapping and parameter tuning of every pipeline stage; helped set up self-hosted Git.</li>
-  </ul>
-</section>
+<details class="entry" style="--c: var(--stone)">
+  <summary>
+    <span class="head"><span class="title">Computer Vision Engineer (intern), Alphacore</span><span class="meta">Tempe, AZ · Summer 2025</span></span>
+    <span class="hook">Greenfield stereo-camera system for long-range maritime tracking; helped win a follow-on contract.</span>
+  </summary>
+  <div class="body">
+    <ul>
+      <li>Designed and prototyped the stereo pipeline for multi-object tracking (OpenCV, YOLOv11, Kalman filters, Hungarian matching).</li>
+      <li>Found why calibration error was too high: a quiver plot of reprojection residuals exposed printing errors in the calibration target.</li>
+      <li>Reverse-engineered part of the camera's proprietary USB protocol (Wireshark, Ghidra, Claude Code with MCP) to control exposure without the vendor's Windows app.</li>
+      <li>Built a GUI (Dear ImGui) for live module swapping and parameter tuning of every pipeline stage; helped set up self-hosted Git.</li>
+    </ul>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--sky)">
-  <div class="head"><h3>Teaching assistant, 15-317 Constructive Logic</h3><span class="meta">CMU · Fall 2024</span></div>
-  <p class="muted">Recitations, office hours, grading.</p>
-</section>
-
-<section class="entry" style="--c: var(--stone)">
-  <div class="head"><h3>President, CMU Computer Club</h3><span class="meta">CMU · 2024</span></div>
-  <p class="muted">Ran club events and helped maintain club-hosted servers used by many student organizations.</p>
-</section>
+<div class="plain-list">
+  <p><span class="title">Teaching assistant, 15-317 Constructive Logic</span> <span class="meta">CMU · Fall 2024</span></p>
+  <p><span class="title">President, CMU Computer Club</span> <span class="meta">CMU · 2024</span><br><span class="muted small">Ran events and helped maintain club-hosted servers used by many student organizations.</span></p>
+</div>
 
 <h2>Things to play with</h2>
 
-<section class="entry" style="--c: var(--sun)">
-  <div class="head"><h3>Isomorphic keyboard</h3><span class="meta">Rust, evdev, QMK</span></div>
-  <p>
-    A laptop keyboard's staggered rows are already a hexagonal grid; this plays it as a Wicki–Hayden instrument, where every
-    chord has the same shape in every key. The native version reads evdev, speaks MIDI, and on a Hall-effect keyboard runs my
-    custom firmware that times each keystroke for velocity and lights up the current scale.
-  </p>
-  <div class="actions"><a href="isomorphic/">play it in your browser →</a><a href="https://github.com/Mathtician/isomorphic">code →</a></div>
-</section>
+<details class="entry" style="--c: var(--sun)">
+  <summary>
+    <span class="head"><span class="title">Isomorphic keyboard</span><span class="meta">Rust, evdev, QMK</span></span>
+    <span class="hook">Play your computer keyboard as a Wicki-Hayden instrument. <a href="isomorphic/">Try it in your browser →</a></span>
+  </summary>
+  <div class="body">
+    <p>
+      A laptop keyboard's staggered rows are already a hexagonal grid; this plays it as a Wicki-Hayden instrument, where every
+      chord has the same shape in every key. The native version reads evdev and speaks MIDI. On a Hall-effect keyboard it runs my
+      custom firmware, which times each keystroke for velocity and lights up the keys of the current scale.
+    </p>
+    <div class="actions"><a href="isomorphic/">play →</a><a href="https://github.com/Mathtician/isomorphic">code →</a></div>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--grass)" data-golf>
-  <div class="head"><h3>Tessera Links</h3><span class="meta">TypeScript, exact arithmetic</span></div>
-  <p>
-    Golf on a kisrhombille tiling: a hexagonal ball ricochets through a world of 30-60-90 triangles, with every collision
-    computed exactly in integer lattice coordinates and rational time — and cross-checked against a floating-point simulator.
-  </p>
-  <div class="actions"><a href="golf/">play →</a><a href="https://github.com/Mathtician/tessera-links">code →</a></div>
-</section>
+<details class="entry" style="--c: var(--sun)">
+  <summary>
+    <span class="head"><span class="title">The tiling up top</span><span class="meta">JavaScript</span></span>
+    <span class="hook">My avatar is one of the 908 rhombus tilings of a 12-gon; flips walk between all of them.</span>
+  </summary>
+  <div class="body">
+    <p>
+      Vertices live in ℤ<sup>6</sup>, so the combinatorics is exact; a flip is a 180° rotation of three tiles about their
+      hexagon's center. Each tile's color is determined by its angle, which flips preserve. <a href="tiling.js">Source.</a>
+    </p>
+  </div>
+</details>
 
-<section class="entry" style="--c: var(--sky)">
-  <div class="head"><h3>The tiling up top</h3><span class="meta">JavaScript</span></div>
-  <p>
-    My avatar is one of the 908 rhombus tilings of a regular 12-gon, and you can walk between all of them by flipping hexagons.
-    Vertices live in ℤ<sup>6</sup>, so the combinatorics is exact; a flip is a 180° rotation of three tiles about the hexagon's center.
-    Each tile's color is determined by its angle, which flips preserve.
-    <a href="tiling.js">Source.</a>
-  </p>
-</section>
-
-<h2>Smaller things</h2>
-<ul class="compact">
-  <li><b>449-byte ELF.</b> Smallest x86 Linux executable I could make that prints a particular 11,178-bit string — BWT, LZ77 with Exp-Golomb codes, and code hidden in ELF header fields.</li>
-  <li><b>Common nets of boxes.</b> All 2,263 common unfoldings of the 1×1×5 and 1×2×3 boxes, and which can be deformed into one another (<a href="https://github.com/Mathtician/common_nets">repo</a>).</li>
-  <li><b>The Voynich manuscript's line structure.</b> A controlled statistical study of whether repetition aligns in columns across adjacent lines, reporting both positive and negative results.</li>
-  <li><b>Speculative decoding on a laptop iGPU.</b> EAGLE3 and multi-token-prediction drafting in llama.cpp: up to 2.1× faster generation for 30B-class models on a Radeon 760M.</li>
-  <li><b>OEIS.</b> <a href="https://oeis.org/search?q=author%3A%22Aresh+Pourkavoos%22">Seven integer sequences</a>, e.g. <a href="https://oeis.org/A330731">A330731</a>.</li>
-  <li><b>Idea book.</b> <a href="https://github.com/Mathtician/ideas">Fifty-odd short math write-ups</a> in LaTeX.</li>
-</ul>
+<details class="entry" style="--c: var(--sun)">
+  <summary>
+    <span class="head"><span class="title">Math on the side</span><span class="meta">various</span></span>
+    <span class="hook">Common nets of boxes, the Voynich manuscript's line structure, OEIS sequences, an idea book.</span>
+  </summary>
+  <div class="body">
+    <ul>
+      <li><b>Common nets of boxes.</b> All 2,263 common unfoldings of the 1×1×5 and 1×2×3 boxes, and which can be deformed into one another (<a href="https://github.com/Mathtician/common_nets">repo</a>).</li>
+      <li><b>The Voynich manuscript's line structure.</b> A controlled statistical study of whether repetition aligns in columns across adjacent lines, reporting both positive and negative results.</li>
+      <li><b>OEIS.</b> <a href="https://oeis.org/search?q=author%3A%22Aresh+Pourkavoos%22">Seven integer sequences</a>, e.g. <a href="https://oeis.org/A330731">A330731</a>.</li>
+      <li><b>Idea book.</b> <a href="https://github.com/Mathtician/ideas">Fifty-odd short math write-ups</a> in LaTeX.</li>
+    </ul>
+  </div>
+</details>
 
 <h2>Education</h2>
 <div class="grid2">
-  <section class="entry" style="--c: var(--grass)">
-    <h3>University of Illinois Chicago</h3>
-    <p class="sub">MS, Computer Science · 2025–2027 · GPA 4.00</p>
+  <div>
+    <p><span class="title">University of Illinois Chicago</span><br><span class="sub">MS, Computer Science · 2025 to 2027 · GPA 4.00</span></p>
     <p class="small muted">Operating Systems · Agentic AI · RLHF · Systems Performance · Advanced Machine Learning</p>
-  </section>
-  <section class="entry" style="--c: var(--sky)">
-    <h3>Carnegie Mellon University</h3>
-    <p class="sub">BS, Computer Science, minor in Mathematics · 2021–2025 · GPA 3.83</p>
-    <p class="small muted">Intro to ML (PhD) · Compiler Design (a C-subset compiler in Rust, plus an x86 assembler) · Foundations of Programming Languages · Honors Abstract Algebra I–II · Honors Real Analysis</p>
-  </section>
+  </div>
+  <div>
+    <p><span class="title">Carnegie Mellon University</span><br><span class="sub">BS, Computer Science, minor in Mathematics · 2021 to 2025 · GPA 3.83</span></p>
+    <p class="small muted">Intro to ML (PhD) · Compiler Design (a C-subset compiler in Rust, plus an x86 assembler) · Foundations of Programming Languages · Honors Abstract Algebra I and II · Honors Real Analysis</p>
+  </div>
 </div>
 <p><b>Putnam Competition:</b> top 200 (2022), top 500 (2021).</p>
 
@@ -260,5 +332,15 @@
 </footer>
 </main>
 <script src="tiling.js"></script>
+<script src="rlbchart.js"></script>
+<script>
+  // "Expand all" toggles every collapsible entry.
+  document.querySelector("[data-expand-all]").addEventListener("click", (e) => {
+    const all = [...document.querySelectorAll("details")];
+    const open = !all.every((d) => d.open);
+    all.forEach((d) => (d.open = open));
+    e.target.textContent = open ? "Collapse all" : "Expand all";
+  });
+</script>
 </body>
 </html>
